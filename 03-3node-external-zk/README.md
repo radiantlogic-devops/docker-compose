@@ -1,1 +1,0 @@
-# 3node-external-zk
