@@ -29,10 +29,9 @@ docker-compose up -d
 ```
 - To bring down and delete the container 
 ```
-docker-compose down
+docker-compose down -v
 ```
-> Note: Above command will not delete any volumes created while setting up container
 
 > Following usage command have been tested on docker version `20.10.8` & docker-compose version `1.29.2`
 
-Once the container is up, Login into main control panel on port 7070 of the docker host `http://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:17070` and use `cn=Directory Manager` as username and `secret1234` as default password
+Once the container is up, Login into main control panel on port 7070 of the docker host `http://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:7070` and use `cn=Directory Manager` as username and `secret1234` as default password
