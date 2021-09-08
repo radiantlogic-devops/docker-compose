@@ -8,7 +8,7 @@ Example docker-compose.yaml file for three-node zookeeper deployment
 - docker  [Download Instructions]: <https://docs.docker.com/get-docker>
 - docker-compose [Download Instructions]: <https://docs.docker.com/compose/install>
 - Create a bridge network with following name `zk-net` `docker network create --driver=bridge zk-net` (If you are changing the name from zk-net, Please update yaml files accrodingly)
-- Prepare .env file for setting up the container
+- Prepare .env file for setting up the container or use sample .env file present in this directory
 ```
 # Example .env file
 ZK_VERSION=3.5.8
@@ -26,8 +26,9 @@ docker-compose up -d
 ```
 - To bring down and delete the container 
 ```
-docker-compose down -v
+docker-compose down
 ```
+> Note: Above command will not delete any volumes created while setting up container, Add `-v` flag to delete volumes as well `docker-compose down -v`
 
 > Following usage command have been tested on docker version `20.10.8` & docker-compose version `1.29.2`
 
