@@ -1,0 +1,31 @@
+version: "3.3"
+services:
+  fid-0:
+    image: radiantone/fid:${FID_VERSION}
+    hostname: "fid-0"
+    environment:
+      CLUSTER: "new" # new is default when not specified
+      ZK_CLUSTER: ${CLUSTER_NAME}
+      LICENSE: ${LICENSE}
+    ports:
+      - "7070:7070"
+      - "7171:7171"
+      - "2389:2389"
+      - "2636:2636"
+      - "8089:8089"
+      - "8090:8090"
+    volumes:
+      - fid-0:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - fid-0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fid-0:9100/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+networks:
+  fid-net:
+volumes:
+  fid-0:
