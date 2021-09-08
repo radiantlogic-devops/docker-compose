@@ -32,4 +32,4 @@ docker-compose down
 
 > Following usage command have been tested on docker version `20.10.8` & docker-compose version `1.29.2`
 
-Once the container is up login into main control panel on port 7070 of the docker host `http://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:7070` and use `cn=Directory Manager` as username and `secret1234` as default password
+Once the container is up, Login into main control panel on port 7070 of the docker host `http://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:7070` and use `cn=Directory Manager` as username and `secret1234` as default password

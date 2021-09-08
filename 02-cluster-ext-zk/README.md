@@ -1,12 +1,12 @@
 # 3node-fid-cluster-external-zk
 
-Example docker-compose.yaml file for 3 node-cluster FID deployment with exter zokkeper deployment
+Example docker-compose.yaml file for 3 node-cluster FID deployment with external zookeper deployment
 
 ## Prerequisites
 > check and install following if they are not available on the server
 - docker  [Download Instructions]: <https://docs.docker.com/get-docker>
 - docker-compose [Download Instructions]: <https://docs.docker.com/compose/install>
-- Setup external zookeeper ensemble to be up and ready in `network: zk-net` (Check http://HOSTNAME:8080/commands/is_read_only for read_only : false on all zookeeper nodes)
+- Setup external zookeeper ensemble to be up and ready in `network: zk-net` (Check [03-external-zk] for setting up external zookeeper)
 - Prepare .env file for setting up the container
 ```
 # Example .env file
@@ -35,4 +35,4 @@ docker-compose down
 
 > Following usage command have been tested on docker version `20.10.8` & docker-compose version `1.29.2`
 
-Once the container is up login into main control panel on port 7070 of the docker host `http://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:17070` and use `cn=Directory Manager` as username and `secret1234` as default password
+Once the container is up, Login into main control panel on port 7070 of the docker host `http://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:17070` and use `cn=Directory Manager` as username and `secret1234` as default password

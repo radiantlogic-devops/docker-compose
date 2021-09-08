@@ -1,13 +1,13 @@
 # 3node-external-zk
 
 
-Example docker-compose.yaml file for single-node(standalone) FID deployment
+Example docker-compose.yaml file for three-node zookeeper deployment
 
 ## Prerequisites
 > check and install following if they are not available on the server
 - docker  [Download Instructions]: <https://docs.docker.com/get-docker>
 - docker-compose [Download Instructions]: <https://docs.docker.com/compose/install>
-- Create a bridge network with following name zk-net `docker network create --driver=bridge zk-net` (If you are chnaging the name from zk-net, Please update yaml files accrodingly)
+- Create a bridge network with following name `zk-net` `docker network create --driver=bridge zk-net` (If you are changing the name from zk-net, Please update yaml files accrodingly)
 - Prepare .env file for setting up the container
 ```
 # Example .env file
@@ -32,7 +32,7 @@ docker-compose down
 
 > Following usage command have been tested on docker version `20.10.8` & docker-compose version `1.29.2`
 
-Once the containers are up check on port 18080 of the docker host `http://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:18080/commands/is_read_only` to see zookeeper ensemble is in read-write mode
+Once the containers are up, Check on port 18080 of the docker host `http://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:18080/commands/is_read_only` to see zookeeper ensemble is in read-write mode
 
 Here is example output
 ```
