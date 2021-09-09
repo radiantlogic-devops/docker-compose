@@ -6,10 +6,10 @@ services:
     environment:
       CLUSTER: "new" 
       ZK: "external"
-      ZK_CLUSTER: ${CLUSTER_NAME}
-      ZK_CONN_STR: ${ZK_CONN_STR}
-      ZK_PASSWORD: ${ZK_PASSWORD}
-      LICENSE: ${LICENSE}
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      ZK_CONN_STR: "${ZK_CONN_STR}"
+      ZK_PASSWORD: "${ZK_PASSWORD}"
+      LICENSE: "${LICENSE}"
     ports:
       - "7070:7070"
       - "7171:7171"
@@ -34,10 +34,10 @@ services:
     environment:
       CLUSTER: "join"
       ZK: "external"
-      ZK_CLUSTER: ${CLUSTER_NAME}
-      ZK_CONN_STR: ${ZK_CONN_STR}
-      ZK_PASSWORD: ${ZK_PASSWORD}
-      LICENSE: ${LICENSE}
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      ZK_CONN_STR: "${ZK_CONN_STR}"
+      ZK_PASSWORD: "${ZK_PASSWORD}"
+      LICENSE: "${LICENSE}"
     ports:
       - "27070:7070"
       - "27171:7171"
@@ -65,10 +65,10 @@ services:
     environment:
       CLUSTER: "join"
       ZK: "external"
-      ZK_CLUSTER: ${CLUSTER_NAME}
-      ZK_CONN_STR: ${ZK_CONN_STR}
-      ZK_PASSWORD: ${ZK_PASSWORD}
-      LICENSE: ${LICENSE}
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      ZK_CONN_STR: "${ZK_CONN_STR}"
+      ZK_PASSWORD: "${ZK_PASSWORD}"
+      LICENSE: "${LICENSE}"
     ports:
       - "37070:7070"
       - "37171:7171"

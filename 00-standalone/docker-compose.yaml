@@ -5,8 +5,8 @@ services:
     hostname: "fid-0"
     environment:
       CLUSTER: "new" # new is default when not specified
-      ZK_CLUSTER: ${CLUSTER_NAME}
-      LICENSE: ${LICENSE}
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      LICENSE: "${LICENSE}"
     ports:
       - "7070:7070"
       - "7171:7171"
