@@ -1,0 +1,87 @@
+version: "3.3"
+services:
+  zk-0:
+    image: radiantone/zookeeper:${ZK_VERSION}
+    hostname: "zk-0"
+    environment:
+      CLIENT_PORT: "2181"
+      ENSEMBLE_PORT: "2888"
+      LEADERRELECTION_PORT: "3888"
+      ADMIN_PORT: "8080"
+      ZOOKEEPER_FLEET_SIZE: "3"
+      JAVA_HOME: "/opt/radiantone/rli-zookeeper-external/jdk/jre/"
+    ports:
+      - "12181:2181"
+      - "12888:2888"
+      - "13888:3888"
+      - "18080:8080"
+    volumes:
+      - zk-0:/opt/radiantone
+    networks:
+      zk-net:
+        aliases:
+          - zk-0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://zk-0:8080/commands/ruok"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  zk-1:
+    image: radiantone/zookeeper:${ZK_VERSION}
+    hostname: "zk-1"
+    environment:
+      CLIENT_PORT: "2181"
+      ENSEMBLE_PORT: "2888"
+      LEADERRELECTION_PORT: "3888"
+      ADMIN_PORT: "8080"
+      ZOOKEEPER_FLEET_SIZE: "3"
+      JAVA_HOME: "/opt/radiantone/rli-zookeeper-external/jdk/jre/"
+    ports:
+      - "22181:2181"
+      - "22888:2888"
+      - "23888:3888"
+      - "28080:8080"
+    volumes:
+      - zk-1:/opt/radiantone
+    networks:
+      zk-net:
+        aliases:
+          - zk-1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://zk-1:8080/commands/ruok"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  zk-2:
+    image: radiantone/zookeeper:${ZK_VERSION}
+    hostname: "zk-2"
+    environment:
+      CLIENT_PORT: "2181"
+      ENSEMBLE_PORT: "2888"
+      LEADERRELECTION_PORT: "3888"
+      ADMIN_PORT: "8080"
+      ZOOKEEPER_FLEET_SIZE: "3"
+      JAVA_HOME: "/opt/radiantone/rli-zookeeper-external/jdk/jre/"
+    ports:
+      - "32181:2181"
+      - "32888:2888"
+      - "33888:3888"
+      - "38080:8080"
+    volumes:
+      - zk-2:/opt/radiantone
+    networks:
+      zk-net:
+        aliases:
+          - zk-2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://zk-2:8080/commands/ruok"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+networks:
+  zk-net:
+    external: true
+volumes:
+  zk-0:
+  zk-1:
+  zk-2:

@@ -1,0 +1,99 @@
+version: "3.3"
+services:
+  fid-0:
+    image: radiantone/fid:${FID_VERSION}
+    hostname: "fid-0"
+    environment:
+      CLUSTER: "new" 
+      ZK: "external"
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      ZK_CONN_STR: "${ZK_CONN_STR}"
+      ZK_PASSWORD: "${ZK_PASSWORD}"
+      LICENSE: "${LICENSE}"
+    ports:
+      - "7070:7070"
+      - "7171:7171"
+      - "2389:2389"
+      - "2636:2636"
+      - "8089:8089"
+      - "8090:8090"
+    volumes:
+      - fid-0:/opt/radiantone
+    networks:
+      zk-net:
+        aliases:
+          - fid-0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fid-0:9100/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  fid-1:
+    image: radiantone/fid:${FID_VERSION}
+    hostname: "fid-1"
+    environment:
+      CLUSTER: "join"
+      ZK: "external"
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      ZK_CONN_STR: "${ZK_CONN_STR}"
+      ZK_PASSWORD: "${ZK_PASSWORD}"
+      LICENSE: "${LICENSE}"
+    ports:
+      - "27070:7070"
+      - "27171:7171"
+      - "22389:2389"
+      - "22636:2636"
+      - "28089:8089"
+      - "28090:8090"
+    volumes:
+      - fid-1:/opt/radiantone
+    networks:
+      zk-net:
+        aliases:
+          - fid-1
+    depends_on:
+      fid-0:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fid-1:9100/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  fid-2:
+    image: radiantone/fid:${FID_VERSION}
+    hostname: "fid-2"
+    environment:
+      CLUSTER: "join"
+      ZK: "external"
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      ZK_CONN_STR: "${ZK_CONN_STR}"
+      ZK_PASSWORD: "${ZK_PASSWORD}"
+      LICENSE: "${LICENSE}"
+    ports:
+      - "37070:7070"
+      - "37171:7171"
+      - "32389:2389"
+      - "32636:2636"
+      - "38089:8089"
+      - "38090:8090"
+    volumes:
+      - fid-2:/opt/radiantone
+    networks:
+      zk-net:
+        aliases:
+          - fid-2
+    depends_on:
+      fid-0:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fid-2:9100/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+networks:
+  zk-net:
+    external: true
+volumes:
+  fid-0:
+  fid-1:
+  fid-2:
