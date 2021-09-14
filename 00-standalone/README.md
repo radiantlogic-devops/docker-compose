@@ -1,4 +1,4 @@
-# standlaone one node FID
+# standalone one node FID
 
 Example docker-compose.yaml file for single-node(standalone) FID deployment
 
