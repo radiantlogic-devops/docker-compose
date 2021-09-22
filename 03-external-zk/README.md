@@ -16,11 +16,11 @@ ZK_VERSION=3.5.8
 - Place `docker-compose.yaml` & `.env` file in directory and open terminal session
 
 ## Usage
-- This following command will show you all the logs & will be useful to troubleshoot any issue while constainer is spinning up
+- The following command will show you all the logs & will be useful to troubleshoot any issue while container is spinning up
 ```
 docker-compose up 
 ```
-- Use this following command to spin up the continer in the background
+- Use this following command to spin up the container in the background
 ```
 docker-compose up -d
 ```

@@ -11,14 +11,14 @@ The following table lists the actions you might want to take and the available t
 | **Display Metrics** | <ul><li>[Grafana](https://grafana.com/)</li></ul> |
 | **Generate Load** | <ul><li>pingidentity/ldap-sdk-tools</li></ul> |
 
-By using this stack you can deploy FID cluster and monitor metrics in grafana generated whilest generating some traffic with searchrate,authrate & modrate
+By using this stack you can deploy FID cluster and monitor metrics in grafana generated whilst generating some traffic with searchrate,authrate & modrate
 
 ## Prerequisites
-> check and install following if they are not available on the server
+> check and install the following if they are not available on the server
 - docker  [Download Instructions]: <https://docs.docker.com/get-docker>
 - docker-compose [Download Instructions]: <https://docs.docker.com/compose/install>
 - Prepare .env file for setting up the container or use sample .env file present in this directory
-- Check you deployment server has enough memory(24GB) for three node fid cluster and other services in this stack else you can comment fid-1, fid-2, fid-exporter-1 & fid-exporter-2 services in `docker-compose.yaml`
+- Check your deployment server has enough memory for three node fid cluster and other services in this stack else you can comment fid-1, fid-2, fid-exporter-1 & fid-exporter-2 services in `docker-compose.yaml`
 ```
 # Example .env file
 FID_VERSION=7.3.16
@@ -28,11 +28,11 @@ LICENSE=PASTE_YOUR_LICENSE_HERE
 ```
 
 ## Usage
-- This following command will show you all the logs & will be useful to troubleshoot any issue while constainers are spinning up
+- The following command will show you all the logs & will be useful to troubleshoot any issue while containers are spinning up
 ```
 docker-compose up 
 ```
-- Use this following command to spin up the continer in the background
+- Use this following command to spin up the container in the background
 ```
 docker-compose up -d
 ```
