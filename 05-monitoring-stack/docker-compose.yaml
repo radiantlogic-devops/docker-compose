@@ -195,7 +195,7 @@ services:
       timeout: 10s
       retries: 10
   fid-exporter-0:
-    image: vamzi/fid-ldap-exporter
+    image: radiantone/fid-exporter
     environment: 
       - PUSH_MODE=true
       - PUSHGATEWAY_URI=http://pushgateway:9091
@@ -213,7 +213,7 @@ services:
         aliases:
           - fid-exporter-0
   fid-exporter-1:
-    image: vamzi/fid-ldap-exporter
+    image: radiantone/fid-exporter
     environment: 
       - PUSH_MODE=true
       - PUSHGATEWAY_URI=http://pushgateway:9091
@@ -231,7 +231,7 @@ services:
         aliases:
           - fid-exporter-1
   fid-exporter-2:
-    image: vamzi/fid-ldap-exporter
+    image: radiantone/fid-exporter
     environment: 
       - PUSH_MODE=true
       - PUSHGATEWAY_URI=http://pushgateway:9091
