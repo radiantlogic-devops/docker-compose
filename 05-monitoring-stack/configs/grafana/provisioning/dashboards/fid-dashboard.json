@@ -23,7 +23,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1633117676943,
+  "iteration": 1633380085780,
   "links": [
     {
       "asDropdown": false,
@@ -304,7 +304,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "ldap_server_version",
+          "expr": "ldap_server_version{instance=~\"$node\",job=\"fid-targets\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -360,7 +360,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "ldap_monitor_currenttime*1000",
+          "expr": "ldap_monitor_currenttime{instance=~\"$node\",job=\"fid-targets\"}*1000",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1490,12 +1490,12 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": [
-            "fid-0"
+            "fid-1"
           ],
           "value": [
-            "fid-0"
+            "fid-1"
           ]
         },
         "datasource": "prometheus",
