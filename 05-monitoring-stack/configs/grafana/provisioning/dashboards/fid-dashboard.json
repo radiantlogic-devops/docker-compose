@@ -18,11 +18,28 @@
       }
     ]
   },
+  "description": "Dashboard to monitor key metrics from fid-exporter",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1632347558686,
-  "links": [],
+  "id": null,
+  "iteration": 1633117676943,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [
+        "host_metrics"
+      ],
+      "targetBlank": false,
+      "title": "Host Metrics (node_exporter,cadvisor)",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
   "panels": [
     {
       "datasource": "prometheus",
@@ -59,7 +76,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 6,
+        "w": 5,
         "x": 0,
         "y": 0
       },
@@ -79,7 +96,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -89,20 +106,22 @@
           "refId": "A"
         }
       ],
-      "title": "Load",
+      "title": "CPU Used",
       "type": "stat"
     },
     {
-      "datasource": "prometheus",
-      "description": "The total amount of memory currently used by RadiantOne FID. This number fluctuates (as the server is running) depending on how much memory it needs to serve client requests and how fast the Garbage Collector (GC) can recycle the discarded resources.",
+      "datasource": null,
+      "description": "JVM Memory used(Note: This is not the actual machine memory)",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "mappings": [],
+          "max": 100,
+          "min": 1,
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
                 "color": "green",
@@ -113,22 +132,159 @@
                 "value": 80
               },
               {
-                "color": "red",
+                "color": "dark-red",
                 "value": 90
               }
             ]
           },
-          "unit": "deckbytes"
+          "unit": "percent"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 4,
-        "w": 7,
-        "x": 6,
+        "w": 3,
+        "x": 5,
         "y": 0
       },
-      "id": 8,
+      "id": 27,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "(ldap_memory_used{instance=~\"$node\",job=\"fid-targets\"} / ldap_memory_max{instance=~\"$node\",job=\"fid-targets\"}) * 100",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "title": "RAM Usage",
+      "type": "gauge"
+    },
+    {
+      "datasource": "prometheus",
+      "description": "Current amount of machine disk-space used",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 8,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "(ldap_disk_used{instance=~\"$node\",job=\"fid-targets\"}/ ldap_disk_total{instance=~\"$node\",job=\"fid-targets\"})*100",
+          "format": "time_series",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "title": "Disk Used",
+      "type": "gauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "noValue": "N/A",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 11,
+        "y": 0
+      },
+      "id": 34,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -144,23 +300,77 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
-          "expr": "ldap_memory_used{instance=~\"$node\",job=\"fid-targets\"}",
+          "expr": "ldap_server_version",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "RAM Usage",
-      "transformations": [],
+      "title": "Version",
       "type": "stat"
     },
     {
       "datasource": null,
-      "description": "Memory Allocated - The total amount of memory allocated for the RadiantOne FID node, \nMemory Max - Maximum amount of memory (Java heap size) configured for the VDS instance",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "dateTimeAsSystem"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 17,
+        "y": 0
+      },
+      "id": 36,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "ldap_monitor_currenttime*1000",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Server Current Time",
+      "type": "stat"
+    },
+    {
+      "datasource": "prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -168,58 +378,61 @@
           },
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "orange",
-                "value": 80
-              },
-              {
-                "color": "red",
-                "value": 100
               }
             ]
-          },
-          "unit": "deckbytes"
+          }
         },
         "overrides": [
           {
             "matcher": {
               "id": "byRegexp",
-              "options": "/^ldap_memory_allocated*/g"
+              "options": "/^ldap_current_pool_size_anonymous*/g"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Memory Allocated"
+                "value": "Anonymous"
               }
             ]
           },
           {
             "matcher": {
               "id": "byRegexp",
-              "options": "/^ldap_memory_max*/g"
+              "options": "/^ldap_current_pool_size_simple*/g"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Memory Max"
+                "value": "Simple"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^ldap_current_pool_size_digest*/g"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Digest"
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 4,
-        "w": 5,
-        "x": 13,
+        "h": 10,
+        "w": 4,
+        "x": 19,
         "y": 0
       },
-      "id": 27,
+      "id": 14,
       "options": {
         "colorMode": "none",
         "graphMode": "none",
@@ -235,116 +448,35 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
-          "expr": "ldap_memory_allocated{instance=~\"$node\",job=\"fid-targets\"}",
+          "expr": "ldap_current_pool_size_anonymous{instance=~\"$node\",job=\"fid-targets\"}",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "ANONYMOUS"
+        },
+        {
+          "exemplar": true,
+          "expr": "ldap_current_pool_size_simple{instance=~\"$node\",job=\"fid-targets\"}",
+          "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "ldap_memory_max{instance=~\"$node\",job=\"fid-targets\"}",
+          "expr": "ldap_current_pool_size_digest{instance=~\"$node\",job=\"fid-targets\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "",
           "refId": "B"
         }
       ],
-      "title": "RAM",
-      "type": "stat"
-    },
-    {
-      "datasource": "prometheus",
-      "description": "Current amount of machine disk-space used",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/^ldap_disk_used*/g"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Disk Used"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/^ldap_disk_total*/g"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Disk Total"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 5,
-        "x": 18,
-        "y": 0
-      },
-      "id": 10,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value_and_name"
-      },
-      "pluginVersion": "8.1.4",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "ldap_disk_used{instance=~\"$node\",job=\"fid-targets\"}",
-          "format": "time_series",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "ldap_disk_total{instance=~\"$node\",job=\"fid-targets\"}",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "B"
-        }
-      ],
-      "title": "Disk",
+      "title": "FID Pool",
       "type": "stat"
     },
     {
@@ -391,7 +523,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -458,7 +590,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -539,7 +671,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -675,7 +807,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -710,116 +842,6 @@
         }
       ],
       "title": "Peak Stats",
-      "type": "stat"
-    },
-    {
-      "datasource": "prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/^ldap_current_pool_size_anonymous*/g"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Anonymous"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/^ldap_current_pool_size_simple*/g"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Simple"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/^ldap_current_pool_size_digest*/g"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Digest"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 4,
-        "x": 19,
-        "y": 4
-      },
-      "id": 14,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.1.4",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "ldap_current_pool_size_anonymous{instance=~\"$node\",job=\"fid-targets\"}",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "ANONYMOUS"
-        },
-        {
-          "exemplar": true,
-          "expr": "ldap_current_pool_size_simple{instance=~\"$node\",job=\"fid-targets\"}",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "ldap_current_pool_size_digest{instance=~\"$node\",job=\"fid-targets\"}",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "B"
-        }
-      ],
-      "title": "FID Pool",
       "type": "stat"
     },
     {
@@ -866,7 +888,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -1153,6 +1175,22 @@
           "interval": "",
           "legendFormat": "",
           "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "ldap_pq_1_non_ssl_thread_pool_max_size{instance=~\"$node\",job=\"fid-targets\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "E"
+        },
+        {
+          "exemplar": true,
+          "expr": "ldap_pq_1_ssl_thread_pool_max_size{instance=~\"$node\",job=\"fid-targets\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "F"
         }
       ],
       "title": "Process Queue 1 SSL/non-SSL",
@@ -1265,6 +1303,22 @@
           "interval": "",
           "legendFormat": "",
           "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "ldap_pq_2_non_ssl_thread_pool_max_size{instance=~\"$node\",job=\"fid-targets\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "E"
+        },
+        {
+          "exemplar": true,
+          "expr": "ldap_pq_2_ssl_thread_pool_max_size{instance=~\"$node\",job=\"fid-targets\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "F"
         }
       ],
       "title": "Process Queue 2 SSL/non-SSL",
@@ -1402,6 +1456,22 @@
           "interval": "",
           "legendFormat": "",
           "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "ldap_pq_intl_non_ssl_thread_pool_max_size{instance=~\"$node\",job=\"fid-targets\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "E"
+        },
+        {
+          "exemplar": true,
+          "expr": "ldap_pq_intl_ssl_thread_pool_max_size{instance=~\"$node\",job=\"fid-targets\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "F"
         }
       ],
       "title": "Process Queue INTL SSL/non-SSL",
@@ -1411,7 +1481,10 @@
   "refresh": "5s",
   "schemaVersion": 30,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "fid",
+    "radiantone"
+  ],
   "templating": {
     "list": [
       {
