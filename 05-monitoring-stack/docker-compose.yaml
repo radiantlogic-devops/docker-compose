@@ -171,12 +171,12 @@ services:
   searchrate:
     image: pingidentity/apache-jmeter:latest
     volumes:
-      - ./configs/jmeter:/home
+      - ./configs/jmeter:/home/jmx
     command: wait-for fid-0:2389 -t 900 -- entrypoint.sh start-server
     environment:
       - SERVER_PROFILE_URL=https://github.com/ping-devops-program/anydevops
       - SERVER_PROFILE_PATH=perf/profiles/jmeter
-      - STARTUP_FOREGROUND_OPTS=--nongui -t /home/ldap.jmx -Jhost=fid-0 -Jport=2389 -JthreadCount=10 -Jramp=2
+      - STARTUP_FOREGROUND_OPTS=--nongui -t /home/jmx/ldap.jmx -Jhost=fid-0 -Jport=2389 -JthreadCount=10 -Jramp=2
     networks:
       fid-net:
         aliases:
