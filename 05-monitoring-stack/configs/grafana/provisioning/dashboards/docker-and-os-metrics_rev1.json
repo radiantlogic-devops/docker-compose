@@ -22,9 +22,23 @@
   "editable": true,
   "gnetId": 10566,
   "graphTooltip": 1,
-  "id": 4,
-  "iteration": 1632006371087,
-  "links": [],
+  "iteration": 1633111139609,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [
+        "fid"
+      ],
+      "targetBlank": false,
+      "title": "FID Dashboard",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
   "panels": [
     {
       "cacheTimeout": null,
@@ -88,7 +102,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "expr": "time() - node_boot_time_seconds{instance=~\"$node\"}",
@@ -164,7 +178,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "expr": "count(rate(container_last_seen{id=~\"/docker/.*\",instance=~\"$node\"}[5m]))",
@@ -244,7 +258,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "expr": "min((node_filesystem_size_bytes{fstype=~\"xfs|ext4\",instance=~\"$node\"} - node_filesystem_free_bytes{fstype=~\"xfs|ext4\",instance=~\"$node\"} )/ node_filesystem_size_bytes{fstype=~\"xfs|ext4\",instance=~\"$node\"})",
@@ -325,7 +339,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "expr": "((node_memory_MemTotal_bytes{instance=~\"$node\"} - node_memory_MemAvailable_bytes{instance=~\"$node\"}) / node_memory_MemTotal_bytes{instance=~\"$node\"}) * 100",
@@ -404,7 +418,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "expr": "(node_memory_SwapTotal_bytes{instance=~'$node'} - node_memory_SwapFree_bytes{instance=~'$node'})",
@@ -485,7 +499,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "expr": "node_load1{instance=~\"$node\"} / count by(job, instance)(count by(job, instance, cpu)(node_cpu_seconds_total{instance=~\"$node\"}))",
@@ -545,7 +559,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 1,
       "points": false,
       "renderer": "flot",
@@ -653,7 +667,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -832,7 +846,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -983,7 +997,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1131,7 +1145,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1396,7 +1410,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1506,7 +1520,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1616,7 +1630,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1723,7 +1737,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1823,7 +1837,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1900,12 +1914,14 @@
       "dashes": false,
       "datasource": "prometheus",
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 0,
         "y": 24
       },
+      "hiddenSeries": false,
       "id": 38,
       "legend": {
         "alignAsTable": true,
@@ -1922,8 +1938,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2000,12 +2019,14 @@
       "dashes": false,
       "datasource": "prometheus",
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 8,
         "y": 24
       },
+      "hiddenSeries": false,
       "id": 40,
       "legend": {
         "alignAsTable": true,
@@ -2022,8 +2043,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2100,12 +2124,14 @@
       "dashes": false,
       "datasource": "prometheus",
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 16,
         "y": 24
       },
+      "hiddenSeries": false,
       "id": 39,
       "legend": {
         "alignAsTable": true,
@@ -2122,8 +2148,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2333,7 +2362,11 @@
   "refresh": "5m",
   "schemaVersion": 30,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "cadvisor",
+    "node_exporter",
+    "host_metrics"
+  ],
   "templating": {
     "list": [
       {

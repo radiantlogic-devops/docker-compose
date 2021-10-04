@@ -130,6 +130,70 @@ services:
       interval: 60s
       timeout: 10s
       retries: 10
+  fid-1:
+    image: radiantone/fid:7.3.16
+    hostname: "fid-1"
+    environment:
+      CLUSTER: "join"
+      ZK: "local"
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      ZK_CONN_STR: "fid-0:2181"
+      ZK_PASSWORD: "${ZK_PASSWORD}"
+      LICENSE: "${LICENSE}"
+    ports:
+      - "27070:7070"
+      - "27171:7171"
+      - "22389:2389"
+      - "22636:2636"
+      - "28089:8089"
+      - "28090:8090"
+    volumes:
+      - fid-1:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - fid-1
+    depends_on:
+      fid-0:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fid-1:9100/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  fid-2:
+    image: radiantone/fid:7.3.16
+    hostname: "fid-2"
+    environment:
+      CLUSTER: "join"
+      ZK: "local"
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      ZK_CONN_STR: "fid-0:2181"
+      ZK_PASSWORD: "${ZK_PASSWORD}"
+      LICENSE: "${LICENSE}"
+    ports:
+      - "37070:7070"
+      - "37171:7171"
+      - "32389:2389"
+      - "32636:2636"
+      - "38089:8089"
+      - "38090:8090"
+    volumes:
+      - fid-2:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - fid-2
+    depends_on:
+      fid-0:
+        condition: service_healthy
+      fid-1:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fid-2:9100/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
   fid-exporter-0:
     image: radiantone/fid-exporter
     environment: 
@@ -148,6 +212,42 @@ services:
       fid-net:
         aliases:
           - fid-exporter-0
+  fid-exporter-1:
+    image: radiantone/fid-exporter
+    environment: 
+      - PUSH_MODE=true
+      - PUSHGATEWAY_URI=http://pushgateway:9091
+      - INSTANCE_NAME=fid-1
+      - LDAP_URI=ldap://fid-1:2389
+      - BIND_DN=cn=Directory Manager
+      - BIND_PASSWORD=secret1234
+    ports:
+      - "19095:9095"
+    depends_on:
+      fid-1:
+        condition: service_healthy
+    networks:
+      fid-net:
+        aliases:
+          - fid-exporter-1
+  fid-exporter-2:
+    image: radiantone/fid-exporter
+    environment: 
+      - PUSH_MODE=true
+      - PUSHGATEWAY_URI=http://pushgateway:9091
+      - INSTANCE_NAME=fid-2
+      - LDAP_URI=ldap://fid-2:2389
+      - BIND_DN=cn=Directory Manager
+      - BIND_PASSWORD=secret1234
+    ports:
+      - "29095:9095"
+    depends_on:
+      fid-2:
+        condition: service_healthy
+    networks:
+      fid-net:
+        aliases:
+          - fid-exporter-2
   authrate:
     image: pingidentity/ldap-sdk-tools:edge
     depends_on:
@@ -161,9 +261,9 @@ services:
   modrate:
     image: pingidentity/ldap-sdk-tools:edge
     depends_on:
-      fid-0:
+      fid-2:
         condition: service_healthy
-    command: modrate -h fid-0 -p 2389 -D uid=operator,ou=globalusers,cn=config -w secret1234 --entryDN "uid=[1-1000],dc=lg100k" --attribute description --valueLength 10 --numThreads 1
+    command: modrate -h fid-2 -p 2389 -D uid=operator,ou=globalusers,cn=config -w secret1234 --entryDN "uid=[1-1000],dc=lg100k" --attribute description --valueLength 10 --numThreads 1
     networks:
       fid-net:
         aliases:
@@ -184,9 +284,9 @@ services:
   # searchrate:
   #   image: pingidentity/ldap-sdk-tools:edge
   #   depends_on:
-  #     fid-0:
+  #     fid-1:
   #       condition: service_healthy
-  #   command: searchrate -h fid-0 -p 2389 -D uid=operator,ou=globalusers,cn=config -w secret1234  --scope sub --filter "(&(objectClass=inetorgperson)(uid=*111*))" --attribute givenName --attribute sn --attribute description --numThreads 1
+  #   command: searchrate -h fid-1 -p 2389 -D uid=operator,ou=globalusers,cn=config -w secret1234  --scope sub --filter "(&(objectClass=inetorgperson)(uid=*111*))" --attribute givenName --attribute sn --attribute description --numThreads 1
   #   networks:
   #     fid-net:
   #       aliases:
@@ -198,3 +298,5 @@ volumes:
     pushgateway:
     grafana_data:
     fid-0:
+    fid-1:
+    fid-2:
