@@ -1,29 +1,9 @@
 {
-  "annotations": {
-    "list": [
-      {
-        "builtIn": 1,
-        "datasource": "-- Grafana --",
-        "enable": true,
-        "hide": true,
-        "iconColor": "rgba(0, 211, 255, 1)",
-        "name": "Annotations & Alerts",
-        "target": {
-          "limit": 100,
-          "matchAny": false,
-          "tags": [],
-          "type": "dashboard"
-        },
-        "type": "dashboard"
-      }
-    ]
-  },
   "description": "Dashboard to monitor key metrics from fid-exporter",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1633380085780,
+  "iteration": 1636476226352,
   "links": [
     {
       "asDropdown": false,
@@ -42,7 +22,7 @@
   ],
   "panels": [
     {
-      "datasource": "prometheus",
+      "datasource": "${datasource}",
       "description": "The current amount of system CPU utilized",
       "fieldConfig": {
         "defaults": {
@@ -103,14 +83,14 @@
           "expr": "ldap_cpu_used{instance=~\"$node\",job=\"fid-targets\"}",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "cpu_used"
         }
       ],
       "title": "CPU Used",
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "JVM Memory used(Note: This is not the actual machine memory)",
       "fieldConfig": {
         "defaults": {
@@ -168,22 +148,14 @@
           "expr": "(ldap_memory_used{instance=~\"$node\",job=\"fid-targets\"} / ldap_memory_max{instance=~\"$node\",job=\"fid-targets\"}) * 100",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "B"
+          "refId": "memory_used"
         }
       ],
       "title": "RAM Usage",
       "type": "gauge"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${datasource}",
       "description": "Current amount of machine disk-space used",
       "fieldConfig": {
         "defaults": {
@@ -242,22 +214,14 @@
           "format": "time_series",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "B"
+          "refId": "disk_used"
         }
       ],
       "title": "Disk Used",
       "type": "gauge"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -307,14 +271,14 @@
           "expr": "ldap_server_version{instance=~\"$node\",job=\"fid-targets\"}",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "server_version"
         }
       ],
       "title": "Version",
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -363,14 +327,14 @@
           "expr": "ldap_monitor_currenttime{instance=~\"$node\",job=\"fid-targets\"}*1000",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "currenttime"
         }
       ],
       "title": "Server Current Time",
       "type": "stat"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -456,7 +420,7 @@
           "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "ANONYMOUS"
+          "refId": "anonymous"
         },
         {
           "exemplar": true,
@@ -465,7 +429,7 @@
           "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "simple"
         },
         {
           "exemplar": true,
@@ -473,14 +437,14 @@
           "hide": false,
           "interval": "",
           "legendFormat": "",
-          "refId": "B"
+          "refId": "digest"
         }
       ],
       "title": "FID Pool",
       "type": "stat"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${datasource}",
       "description": "Time elapsed since the server is started",
       "fieldConfig": {
         "defaults": {
@@ -530,7 +494,7 @@
           "expr": "time()-ldap_monitor_starttime{instance=~\"$node\",job=\"fid-targets\"}",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "up_time"
         }
       ],
       "title": "Up Time",
@@ -538,7 +502,7 @@
       "type": "stat"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${datasource}",
       "description": "The live number of concurrent connections to RadiantOne FID (will never be more than connectionMax). This number increases or decreases depending on new connections coming into RadiantOne FID or existing connections being closed",
       "fieldConfig": {
         "defaults": {
@@ -597,14 +561,14 @@
           "expr": "ldap_current_connections{instance=~\"$node\",job=\"fid-targets\"}",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "current_connections"
         }
       ],
       "title": "Live Connections",
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "search, bind, compare, add, delete, or modify (op/s) rate during the last 5 seconds",
       "fieldConfig": {
         "defaults": {
@@ -678,7 +642,7 @@
           "expr": "ldap_write_ops{instance=~\"$node\",job=\"fid-targets\"}",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "write_ops"
         },
         {
           "exemplar": true,
@@ -686,14 +650,14 @@
           "hide": false,
           "interval": "",
           "legendFormat": "",
-          "refId": "B"
+          "refId": "read_ops"
         }
       ],
       "title": "OPS",
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -815,14 +779,14 @@
           "hide": false,
           "interval": "",
           "legendFormat": "",
-          "refId": "C"
+          "refId": "cpu_peak"
         },
         {
           "exemplar": true,
           "expr": "ldap_connection_peak{instance=~\"$node\",job=\"fid-targets\"}",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "connection_peak"
         },
         {
           "exemplar": true,
@@ -830,7 +794,7 @@
           "hide": false,
           "interval": "",
           "legendFormat": "",
-          "refId": "B"
+          "refId": "memory_peak"
         },
         {
           "exemplar": true,
@@ -838,14 +802,14 @@
           "hide": false,
           "interval": "",
           "legendFormat": "",
-          "refId": "D"
+          "refId": "disk_peak"
         }
       ],
       "title": "Peak Stats",
       "type": "stat"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${datasource}",
       "description": "The total number of operations RadiantOne FID has done on the connection",
       "fieldConfig": {
         "defaults": {
@@ -895,14 +859,14 @@
           "expr": "ldap_operation_count{instance=~\"$node\",job=\"fid-targets\"}",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "operation_count"
         }
       ],
       "title": "Operations Count",
       "type": "stat"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -979,14 +943,14 @@
           "expr": "ldap_cpu_used{instance=~\"$node\",job=\"fid-targets\"}",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "cpu_used_graph"
         }
       ],
       "title": "CPU Usage",
       "type": "timeseries"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1062,14 +1026,14 @@
           "expr": "ldap_memory_used{instance=~\"$node\",job=\"fid-targets\"}",
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "memory_used_graph"
         }
       ],
       "title": "RAM Usage",
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1197,7 +1161,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1325,7 +1289,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1488,17 +1452,23 @@
   "templating": {
     "list": [
       {
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+	    "datasource": "${datasource}",
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": [
-            "fid-1"
-          ],
-          "value": [
-            "fid-1"
-          ]
-        },
-        "datasource": "prometheus",
         "definition": "label_values(ldap_monitor_starttime,instance)",
         "description": null,
         "error": null,
