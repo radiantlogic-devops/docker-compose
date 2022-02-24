@@ -3,16 +3,16 @@
 Sample docker-compose.yaml file for single-node(standalone) FID deployment with CFS
 
 ## Prerequisites
-> check and install following if they are not available on the server
-- Docker desktop for Windows v20.x or higher
-- Hyper-v enabled
+> Check and install following if they are not available on the host
 - Running Linux containers on Windows and platform support in Docker Compose requires Windows 1803 or greater.
+- Docker desktop for Windows v20.x or higher - https://www.docker.com/products/docker-desktop
+- Hyper-v enabled - `Enable-WindowsOptionalFeature -Online -FeatureName $("Microsoft-Hyper-V", "Containers") -All`
 
 > Run Docker for Windows in “mixed” mode by running Windows and Linux containers together
 - Switch to Windows containers in Docker for Windows tray
 - Go to Docker Engine settings section and set experimental parameter to ‘true’
 - Apply and restart the docker
-- Check `docker version` should show 
+- Run `docker version` should show 
 ```
 Client:
  Cloud integration: v1.0.22
@@ -35,6 +35,10 @@ Server: Docker Desktop 4.5.1 (74721)
   OS/Arch:          windows/amd64
   Experimental:     true
 ```
+
+## Usage
+> Clone this project locally or copy the files `docker-compose.yaml` and `.env` locally.
+
 > Sample .env file
 ```
 # Example .env file
@@ -44,9 +48,6 @@ CLUSTER_NAME=fid4cfs
 FID_PASSWORD=Radiant1Rocks
 LICENSE=PASTE_YOUR_LICENSE_HERE
 ```
-> Clone this project locally or copy the files `docker-compose.yaml` and `.env` locally.
-
-## Usage
 ### Start
 - The docker-compose up command aggregates the output of each container. When the command exits, all containers are stopped. 
 ```
