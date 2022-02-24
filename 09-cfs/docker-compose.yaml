@@ -1,0 +1,54 @@
+version: "2.2"
+services:
+
+  fid-0:
+    image: ${FID_IMAGE}:${FID_VERSION}
+    platform: linux
+    hostname: "fid-0"
+    mem_limit: 4G
+    environment:
+      CLUSTER: "new"
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      LICENSE: "${LICENSE}"
+      FID_PASSWORD: "${FID_PASSWORD}"
+    ports:
+      - "7070:7070"
+      - "7171:7171"
+      - "2389:2389"
+      - "2636:2636"
+      - "8089:8089"
+      - "8090:8090"
+#    volumes:
+#      - fid-0:/opt/radiantone
+#      - "./fid-export-09152021.zip:/migrations/export.zip"
+    networks:
+      fid-net:
+        aliases:
+          - fid-0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fid-0:9100/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+
+  cfs-master:
+    image: deathcat05/kiwilemonparrot:ltsc2019v7
+    platform: windows
+    environment:
+      VDS_HOSTNAME: "fid-0"
+      VDS_PORT: "2636"
+      CFS_LOG_LEVEL: "5"
+      VDS_USERNAME: "cn=Directory Manager"
+      VDS_PASSWORD: "${FID_PASSWORD}"
+    restart: always
+    ports:
+      - "8443:443"
+    depends_on:
+      - fid-0
+    networks:
+      fid-net:
+      
+networks:
+  fid-net:
+volumes:
+  fid-0:
