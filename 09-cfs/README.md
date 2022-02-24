@@ -75,3 +75,21 @@ docker-compose ps
 > Once the containers are up
 - Login into main control panel on port 7070 of the docker host `https://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:7171` or https://localhost:7171
 - Login to setup CFS https://localhost:8443/system and use the directory manager credentials
+
+### Troubleshooting
+
+> If docker deamon is not starting in windows container mode, Make sure Hyper-V & Continers feaure is enabled on the server/desktop
+
+```
+Enable-WindowsOptionalFeature -Online -FeatureName $("Microsoft-Hyper-V", "Containers") -All
+```
+Run the above command as administrator in prowershell and restart
+
+
+> This following error is thrown when any of your host ports are been used by other services on the server/desktop
+
+```
+Error response from daemon: failed to create endpoint 09-cfs-fid-0-1 on network 09-cfs_fid-net: failed during hnsCallRawResponse: hnsCall failed in 
+Win32: The process cannot access the file because it is being used by another process. (0x20)
+```
+You can troubleshoot this issue by using `netstat` to find `PID` of the process and take necessary actions

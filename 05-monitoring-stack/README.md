@@ -43,6 +43,13 @@ To monitor metrics in grafana open port http 3000 of the docker host `http://<DO
 
 To monitor alerts in prometheus open port http 9090 of the docker host `http://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:9090/alerts` in browser
 
+## Setup grafana with initial config
+```
+curl --location --request POST 'http://localhost:5601/api/saved_objects/_import' \
+--header 'kbn-xsrf: true' \
+--form 'file=@"./configs/kibana/02172022_kibana_backup.ndjson"'
+```
+
 ### Display Metrics
 
 Metrics are displayed at these URLs:

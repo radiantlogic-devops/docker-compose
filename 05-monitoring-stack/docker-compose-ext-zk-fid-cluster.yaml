@@ -48,6 +48,8 @@ services:
     privileged: true
     environment:
       PUSH_MODE: "true"
+      INSTANCE_NAME: "zk-0"
+      JOB_NAME: "zk-targets"
       PUSHGATEWAY_URI: "http://pushgateway:9091"
       ZK_CONN: "zk-0:2181"
       FLUENTD_ENABLE: "true"
@@ -114,6 +116,8 @@ services:
     privileged: true
     environment:
       PUSH_MODE: "true"
+      INSTANCE_NAME: "zk-1"
+      JOB_NAME: "zk-targets"
       PUSHGATEWAY_URI: "http://pushgateway:9091"
       ZK_CONN: "zk-1:2181"
       FLUENTD_ENABLE: "true"
@@ -180,6 +184,8 @@ services:
     privileged: true
     environment:
       PUSH_MODE: "true"
+      INSTANCE_NAME: "zk-2"
+      JOB_NAME: "zk-targets"
       PUSHGATEWAY_URI: "http://pushgateway:9091"
       ZK_CONN: "zk-2:2181"
       FLUENTD_ENABLE: "true"
@@ -209,12 +215,12 @@ services:
       ZK_PASSWORD: "${ZK_PASSWORD}"
       LICENSE: "${LICENSE}"
     ports:
-      - "7070:7070"
-      - "7171:7171"
-      - "2389:2389"
-      - "2636:2636"
-      - "8089:8089"
-      - "8090:8090"
+      - "17070:7070"
+      - "17171:7171"
+      - "12389:2389"
+      - "12636:2636"
+      - "18089:8089"
+      - "18090:8090"
     volumes:
       - fid-0:/opt/radiantone
     networks:
@@ -228,6 +234,8 @@ services:
       retries: 10
   fid-exporter-0:
     image: radiantone/fid-exporter
+    user: root
+    privileged: true
     environment: 
       - PUSH_MODE=true
       - PUSHGATEWAY_URI=http://pushgateway:9091
@@ -239,7 +247,10 @@ services:
       - FLUENTD_CONF=/fluentd/etc/fluent.conf
       - ELASTICSEARCH_HOST=elasticsearch
     ports:
-      - "9095:9095"
+      - "9096:9095"
+    volumes:
+      - fid-0:/opt/radiantone
+    networks:
     depends_on:
       fid-0:
         condition: service_healthy
@@ -267,18 +278,10 @@ services:
     extends:
       file: common-services.yaml
       service: grafana
-  node-exporter:
-    extends:
-      file: common-services.yaml
-      service: node-exporter
   alertmanager:
     extends:
       file: common-services.yaml
       service: alertmanager
-  cadvisor:
-    extends:
-      file: common-services.yaml
-      service: cadvisor
 networks:
   fid-net:
 volumes:
