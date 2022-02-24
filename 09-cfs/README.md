@@ -47,20 +47,29 @@ LICENSE=PASTE_YOUR_LICENSE_HERE
 > Clone this project locally or copy the files `docker-compose.yaml` and `.env` locally.
 
 ## Usage
-- The following command will show you all the logs & will be useful to troubleshoot any issue while container is spinning up
+### Start
+- The docker-compose up command aggregates the output of each container. When the command exits, all containers are stopped. 
 ```
 docker-compose up 
 ```
-- Use this following command to spin up the container in the background
+- Running docker-compose up --detach starts the containers in the background and leaves them running.
 ```
 docker-compose up -d
 ```
-- To bring down and delete the container 
+### Stop
+- Stop containers and removes containers, networks, volumes, and images created by up
 ```
 docker-compose down
 ```
 > Note: Above command will not delete any volumes created while setting up container, Add `-v` flag to delete volumes as well `docker-compose down -v`
+### Status
+- Lists all containers and their status
+```
+docker-compose ps
+```
 
 > Following usage command have been tested on docker version `20.10.8` & docker-compose version `1.29.2`
 
-Once the container is up, Login into main control panel on port 7070 of the docker host `http://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:7070` and use `cn=Directory Manager` as username and `secret1234` as default password
+> Once the containers are up
+- Login into main control panel on port 7070 of the docker host `https://<DOCKER-HOST IP-ADDRESS OR HOST-NAME>:7171` or https://localhost:7171
+- Login to setup CFS https://localhost:8443/system and use the directory manager credentials
