@@ -1,6 +1,6 @@
-# standalone one node FID
+# FID deployment with CFS
 
-Example docker-compose.yaml file for single-node(standalone) FID deployment with CFS
+Sample docker-compose.yaml file for single-node(standalone) FID deployment with CFS
 
 ## Prerequisites
 > check and install following if they are not available on the server
