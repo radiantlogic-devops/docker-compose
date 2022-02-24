@@ -4,6 +4,7 @@ Sample docker-compose.yaml file for single-node(standalone) FID deployment with 
 
 ## Prerequisites
 > Check and install following if they are not available on the host
+- This deployment is supported only on Windows physical hosts
 - Running Linux containers on Windows and platform support in Docker Compose requires Windows 1803 or greater.
 - Docker desktop for Windows v20.x or higher - https://www.docker.com/products/docker-desktop
 - Hyper-v enabled - `Enable-WindowsOptionalFeature -Online -FeatureName $("Microsoft-Hyper-V", "Containers") -All`
