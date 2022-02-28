@@ -1,0 +1,294 @@
+version: "3.3"
+services:
+  zk-0:
+    image: radiantone/zookeeper:${ZK_VERSION}
+    hostname: "zk-0"
+    environment:
+      CLIENT_PORT: "2181"
+      ENSEMBLE_PORT: "2888"
+      LEADERRELECTION_PORT: "3888"
+      ADMIN_PORT: "8080"
+      ZOOKEEPER_FLEET_SIZE: "3"
+      JAVA_HOME: "/opt/radiantone/rli-zookeeper-external/jdk/jre/"
+    entrypoint: "/bin/bash -c"
+    command:
+      - |
+        /opt/radiantone/run.sh &
+        # check nc installed
+        if rpm -qa | grep -i nmap-ncat; then :; else
+          yum install -y nc;
+        fi
+        # check mntr
+        if echo mntr | nc localhost 2181 | grep "not in the whitelist"; then
+          until nc -w 2 -z localhost 2181; do echo Waiting for zk -- 2181;sleep 10; done;echo \"zk is up!\"
+          echo "4lw.commands.whitelist=ruok,mntr" >> /opt/radiantone/rli-zookeeper-external/zookeeper/conf/zoo.cfg
+          /opt/radiantone/rli-zookeeper-external/bin/stop_zookeeper.sh
+          /opt/radiantone/run.sh
+        fi
+        tail -f /dev/stdout
+    ports:
+      - "12181:2181"
+      - "12888:2888"
+      - "13888:3888"
+      - "18080:8080"
+    volumes:
+      - zk-0:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - zk-0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://zk-0:8080/commands/ruok"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  zk-exp-0:
+    image: radiantone/zk-exporter
+    hostname: "zk-exp-0"
+    privileged: true
+    environment:
+      PUSH_MODE: "true"
+      INSTANCE_NAME: "zk-0"
+      JOB_NAME: "zk-targets"
+      PUSHGATEWAY_URI: "http://pushgateway:9091"
+      ZK_CONN: "zk-0:2181"
+      FLUENTD_ENABLE: "true"
+      FLUENTD_CONF: "/fluentd/etc/fluent.conf"
+      ELASTICSEARCH_HOST: "elasticsearch"
+      ELASTICSEARCH_PORT: "9200"
+    user: root
+    ports:
+      - 9095:9095
+    volumes:
+      - zk-0:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - zkexp-0
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+  zk-1:
+    image: radiantone/zookeeper:${ZK_VERSION}
+    hostname: "zk-1"
+    environment:
+      CLIENT_PORT: "2181"
+      ENSEMBLE_PORT: "2888"
+      LEADERRELECTION_PORT: "3888"
+      ADMIN_PORT: "8080"
+      ZOOKEEPER_FLEET_SIZE: "3"
+      JAVA_HOME: "/opt/radiantone/rli-zookeeper-external/jdk/jre/"
+    entrypoint: "/bin/bash -c"
+    command:
+      - |
+        /opt/radiantone/run.sh &
+        # check nc installed
+        if rpm -qa | grep -i nmap-ncat; then :; else
+          yum install -y nc;
+        fi
+        # check mntr
+        if echo mntr | nc localhost 2181 | grep "not in the whitelist"; then
+          until nc -w 2 -z localhost 2181; do echo Waiting for zk -- 2181;sleep 10; done;echo \"zk is up!\"
+          echo "4lw.commands.whitelist=ruok,mntr" >> /opt/radiantone/rli-zookeeper-external/zookeeper/conf/zoo.cfg
+          /opt/radiantone/rli-zookeeper-external/bin/stop_zookeeper.sh
+          /opt/radiantone/run.sh
+        fi
+        tail -f /dev/stdout
+    ports:
+      - "22181:2181"
+      - "22888:2888"
+      - "23888:3888"
+      - "28080:8080"
+    volumes:
+      - zk-1:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - zk-1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://zk-1:8080/commands/ruok"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  zk-exp-1:
+    image: radiantone/zk-exporter
+    hostname: "zk-exp-1"
+    privileged: true
+    environment:
+      PUSH_MODE: "true"
+      INSTANCE_NAME: "zk-1"
+      JOB_NAME: "zk-targets"
+      PUSHGATEWAY_URI: "http://pushgateway:9091"
+      ZK_CONN: "zk-1:2181"
+      FLUENTD_ENABLE: "true"
+      FLUENTD_CONF: "/fluentd/etc/fluent.conf"
+      ELASTICSEARCH_HOST: "elasticsearch"
+      ELASTICSEARCH_PORT: "9200"
+    user: root
+    ports:
+      - 19095:9095
+    volumes:
+      - zk-1:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - zk-exp-1
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+  zk-2:
+    image: radiantone/zookeeper:${ZK_VERSION}
+    hostname: "zk-2"
+    environment:
+      CLIENT_PORT: "2181"
+      ENSEMBLE_PORT: "2888"
+      LEADERRELECTION_PORT: "3888"
+      ADMIN_PORT: "8080"
+      ZOOKEEPER_FLEET_SIZE: "3"
+      JAVA_HOME: "/opt/radiantone/rli-zookeeper-external/jdk/jre/"
+    entrypoint: "/bin/bash -c"
+    command:
+      - |
+        /opt/radiantone/run.sh &
+        # check nc installed
+        if rpm -qa | grep -i nmap-ncat; then :; else
+          yum install -y nc;
+        fi
+        # check mntr
+        if echo mntr | nc localhost 2181 | grep "not in the whitelist"; then
+          until nc -w 2 -z localhost 2181; do echo Waiting for zk -- 2181;sleep 10; done;echo \"zk is up!\"
+          echo "4lw.commands.whitelist=ruok,mntr" >> /opt/radiantone/rli-zookeeper-external/zookeeper/conf/zoo.cfg
+          /opt/radiantone/rli-zookeeper-external/bin/stop_zookeeper.sh
+          /opt/radiantone/run.sh
+        fi
+        tail -f /dev/stdout
+    ports:
+      - "32181:2181"
+      - "32888:2888"
+      - "33888:3888"
+      - "38080:8080"
+    volumes:
+      - zk-2:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - zk-2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://zk-2:8080/commands/ruok"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  zk-exp-2:
+    image: radiantone/zk-exporter
+    hostname: "zk-exp-2"
+    privileged: true
+    environment:
+      PUSH_MODE: "true"
+      INSTANCE_NAME: "zk-2"
+      JOB_NAME: "zk-targets"
+      PUSHGATEWAY_URI: "http://pushgateway:9091"
+      ZK_CONN: "zk-2:2181"
+      FLUENTD_ENABLE: "true"
+      FLUENTD_CONF: "/fluentd/etc/fluent.conf"
+      ELASTICSEARCH_HOST: "elasticsearch"
+      ELASTICSEARCH_PORT: "9200"
+    user: root
+    ports:
+      - 29095:9095
+    volumes:
+      - zk-2:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - zk-exp-2
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+  fid-0:
+    image: radiantone/fid:${FID_VERSION}
+    hostname: "fid-0"
+    environment:
+      CLUSTER: "new" 
+      ZK: "external"
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      ZK_CONN_STR: "${ZK_CONN_STR}"
+      ZK_PASSWORD: "${ZK_PASSWORD}"
+      LICENSE: "${LICENSE}"
+    ports:
+      - "17070:7070"
+      - "17171:7171"
+      - "12389:2389"
+      - "12636:2636"
+      - "18089:8089"
+      - "18090:8090"
+    volumes:
+      - fid-0:/opt/radiantone
+    networks:
+      fid-net:
+        aliases:
+          - fid-0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fid-0:9100/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  fid-exporter-0:
+    image: radiantone/fid-exporter
+    user: root
+    privileged: true
+    environment: 
+      - PUSH_MODE=true
+      - PUSHGATEWAY_URI=http://pushgateway:9091
+      - LDAP_URI=ldap://fid-0:2389
+      - BIND_DN=cn=Directory Manager
+      - BIND_PASSWORD=secret1234
+      - INSTANCE_NAME=fid-0
+      - FLUENTD_ENABLE=true
+      - FLUENTD_CONF=/fluentd/etc/fluent.conf
+      - ELASTICSEARCH_HOST=elasticsearch
+    ports:
+      - "9096:9095"
+    volumes:
+      - fid-0:/opt/radiantone
+    networks:
+    depends_on:
+      fid-0:
+        condition: service_healthy
+    networks:
+      fid-net:
+        aliases:
+          - fid-exporter-0
+  elasticsearch:
+    extends:
+      file: common-services.yaml
+      service: elasticsearch
+  kibana:
+    extends:
+      file: common-services.yaml
+      service: kibana
+  prometheus:
+    extends:
+      file: common-services.yaml
+      service: prometheus
+  pushgateway:
+    extends:
+      file: common-services.yaml
+      service: pushgateway
+  grafana:
+    extends:
+      file: common-services.yaml
+      service: grafana
+  alertmanager:
+    extends:
+      file: common-services.yaml
+      service: alertmanager
+networks:
+  fid-net:
+volumes:
+  zk-0:
+  zk-1:
+  zk-2:
+  fid-0:
+  pushgateway:
+  prometheus_data:
+  grafana_data:

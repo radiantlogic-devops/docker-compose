@@ -1,0 +1,200 @@
+version: "3.3"
+services:
+  prometheus:
+    image: prom/prometheus:v2.29.2
+    hostname: "prometheus"
+    volumes:
+      - ./configs/prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9090:9090"
+    links:
+      - cadvisor:cadvisor
+      - alertmanager:alertmanager
+    depends_on:
+      - cadvisor
+    restart: always
+    networks:
+      fid-net:
+        aliases:
+          - prometheus
+  pushgateway:
+    image: prom/pushgateway
+    hostname: "pushgateway"
+    ports:
+      - "9091:9091"
+    restart: always
+    networks:
+      fid-net:
+        aliases:
+          - pushgateway
+    volumes:
+      - pushgateway:/data
+    command: --persistence.file="/data/metric.store"
+  node-exporter:
+    image: prom/node-exporter
+    hostname: "node-exporter"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    ports:
+      - "9100:9100"
+    restart: always
+    networks:
+      fid-net:
+        aliases:
+          - node-exporter
+  alertmanager:
+    image: prom/alertmanager
+    hostname: "alertmanager"
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./configs/alertmanager/:/etc/alertmanager/
+    restart: always
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    networks:
+      fid-net:
+        aliases:
+          - alertmanager
+  cadvisor:
+    image: google/cadvisor
+    hostname: "cadvisor"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - "8080:8080"
+    restart: always
+    networks:
+      fid-net:
+        aliases:
+          - cadvisor
+  grafana:
+    image: grafana/grafana
+    user: "104"
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./configs/grafana:/etc/grafana
+    env_file:
+      - ./configs/grafana/config.monitoring
+    restart: always
+    networks:
+      fid-net:
+        aliases:
+          - grafana
+  fid-0:
+    image: radiantone/fid:${FID_VERSION}
+    hostname: "fid-0"
+    environment:
+      CLUSTER: "new"
+      ZK: "local"
+      ZK_CLUSTER: "${CLUSTER_NAME}"
+      ZK_PASSWORD: "${ZK_PASSWORD}"
+      LICENSE: "${LICENSE}"
+    ports:
+      - "7070:7070"
+      - "7171:7171"
+      - "2389:2389"
+      - "2636:2636"
+      - "8089:8089"
+      - "8090:8090"
+    volumes:
+      - fid-0:/opt/radiantone
+      - ./configs/fid:/migrations
+    networks:
+      fid-net:
+        aliases:
+          - fid-0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://fid-0:9100/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 10
+  fid-exporter-0:
+    image: radiantone/fid-exporter
+    environment: 
+      - PUSH_MODE=true
+      - PUSHGATEWAY_URI=http://pushgateway:9091
+      - LDAP_URI=ldap://fid-0:2389
+      - BIND_DN=cn=Directory Manager
+      - BIND_PASSWORD=secret1234
+      - INSTANCE_NAME=fid-0
+    ports:
+      - "9095:9095"
+    depends_on:
+      fid-0:
+        condition: service_healthy
+    networks:
+      fid-net:
+        aliases:
+          - fid-exporter-0
+  authrate:
+    image: pingidentity/ldap-sdk-tools:edge
+    depends_on:
+      fid-0:
+        condition: service_healthy
+    command: authrate -h fid-0 -p 2389 -D uid=operator,ou=globalusers,cn=config -w secret1234 -b dc=lg100k -f "(uid=[1-1000])" -C secret --numThreads 1
+    networks:
+      fid-net:
+        aliases:
+          - authrate
+  modrate:
+    image: pingidentity/ldap-sdk-tools:edge
+    depends_on:
+      fid-0:
+        condition: service_healthy
+    command: modrate -h fid-0 -p 2389 -D uid=operator,ou=globalusers,cn=config -w secret1234 --entryDN "uid=[1-1000],dc=lg100k" --attribute description --valueLength 10 --numThreads 1
+    networks:
+      fid-net:
+        aliases:
+          - modrate
+  searchrate:
+    image: pingidentity/apache-jmeter:latest
+    volumes:
+      - ./configs/jmeter:/home/jmx
+    command: wait-for fid-0:2389 -t 900 -- entrypoint.sh start-server
+    environment:
+      - SERVER_PROFILE_URL=https://github.com/ping-devops-program/anydevops
+      - SERVER_PROFILE_PATH=perf/profiles/jmeter
+      - STARTUP_FOREGROUND_OPTS=--nongui -t /home/jmx/ldap.jmx -Jhost=fid-0 -Jport=2389 -JthreadCount=10 -Jramp=2
+    networks:
+      fid-net:
+        aliases:
+          - jmeter
+  # searchrate:
+  #   image: pingidentity/ldap-sdk-tools:edge
+  #   depends_on:
+  #     fid-0:
+  #       condition: service_healthy
+  #   command: searchrate -h fid-0 -p 2389 -D uid=operator,ou=globalusers,cn=config -w secret1234  --scope sub --filter "(&(objectClass=inetorgperson)(uid=*111*))" --attribute givenName --attribute sn --attribute description --numThreads 1
+  #   networks:
+  #     fid-net:
+  #       aliases:
+  #         - searchrate
+networks:
+  fid-net:
+volumes:
+    prometheus_data:
+    pushgateway:
+    grafana_data:
+    fid-0:
