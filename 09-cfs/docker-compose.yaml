@@ -32,7 +32,7 @@ services:
       retries: 10
 
   cfs-master:
-    image: deathcat05/kiwilemonparrot:ltsc2019v7
+    image: radiantone/cfs-master:3.16.0-ltsc2019
     platform: windows
     environment:
       VDS_HOSTNAME: "fid-0"
